@@ -12,3 +12,14 @@ cargo install diesel_cli --no-default-features --features sqlite
 diesel migration run
 cargo run
 ```
+
+# API
+Get pages
+```
+http://127.0.0.1:8000
+```
+
+Add a page with title
+```
+http://127.0.0.1:8000?_title=Title
+```
