@@ -11,6 +11,7 @@ mod schema;
 use diesel::prelude::*;
 use models::*;
 use rocket::serde::json::Json;
+use rocket_cors::CorsOptions;
 use schema::pages::dsl::*;
 
 #[database("database")]
@@ -51,5 +52,6 @@ async fn add_page(_title: &str, connection: DatabaseConnection) -> &str {
 fn rocket() -> _ {
     rocket::build()
         .attach(DatabaseConnection::fairing())
+        .attach(CorsOptions::default().to_cors().unwrap())
         .mount("/", routes![index, add_page])
 }
