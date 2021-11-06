@@ -61,7 +61,11 @@ struct PageDetails {
 #[get("/?<_id>")]
 async fn page(_id: i32, connection: DatabaseConnection) -> Json<PageDetails> {
     let result = connection
-        .run(move |connection| elements::table.filter(elements::page_id.eq(_id)).load::<Element>(connection))
+        .run(move |connection| {
+            elements::table
+                .filter(elements::page_id.eq(_id))
+                .load::<Element>(connection)
+        })
         .await;
 
     let elements = match result {
@@ -70,7 +74,11 @@ async fn page(_id: i32, connection: DatabaseConnection) -> Json<PageDetails> {
     };
 
     let result = connection
-        .run(move |connection| pages::table.filter(pages::id.eq(_id)).load::<Page>(connection))
+        .run(move |connection| {
+            pages::table
+                .filter(pages::id.eq(_id))
+                .load::<Page>(connection)
+        })
         .await;
 
     let pages = match result {
@@ -83,7 +91,7 @@ async fn page(_id: i32, connection: DatabaseConnection) -> Json<PageDetails> {
     match page {
         Some(page) => Json(PageDetails {
             id: page.id,
-            title: "test".to_string(),
+            title: page.title.to_string(),
             elements,
         }),
         None => Json(PageDetails {
